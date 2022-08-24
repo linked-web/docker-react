@@ -5,6 +5,18 @@ services:
 
 before_install:
   - docker build -t linkedweb/docker-react -f Dockerfile.dev .
-  
+
 script:
   - docker run -e CI=true linkedweb/docker-react npm test
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ca-central-1'
+  app: 'docker-react'
+  env: 'Dockerreact-env'
+  bucket_name: 'elasticbeanstalk-ca-central-1-055523997114'
+  bucket_path: 'docker-react'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
